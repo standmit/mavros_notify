@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>mavros_rgbled</name>
+  <version>0.0.1</version>
+  <description>Plugin for MAVROS to control RGB led</description>
+
+  <maintainer email="standmit@zabstrannik.ru">Andrey Stepanov</maintainer>
+
+  <license>MIT</license>
+
+  <author email="standmit@zabstrannik.ru">Andrey Stepanov</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export>
+  </export>
+</package>
