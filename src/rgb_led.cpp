@@ -2,7 +2,7 @@
  * \file
  * \brief   Plugin for MAVROS to control RGB LED
  * \author  Andrey Stepanov
- * \version 0.0.1
+ * \version 0.1.0
  * \copyright
  * MIT License \n
  * Copyright (c) 2020 Andrey Stepanov \n
@@ -24,6 +24,8 @@
  */
 
 #include <mavros/mavros_plugin.h>
+#include <mavros_rgbled/LedControlRaw.h>
+#include <mavros_rgbled/LedControl.h>
 
 namespace mavros {
 
@@ -45,6 +47,14 @@ class RGBLEDPlugin : public plugin::PluginBase {
 
     private:
         ros::NodeHandle plugin_nh;
+
+        ros::Subscriber led_control_raw_sub;
+
+        void led_control_raw_cb(const mavros_rgbled::LedControlRawConstPtr& msg);
+
+        ros::Subscriber led_control_sub;
+
+        void led_control_cb(const mavros_rgbled::LedControlConstPtr& msg);
 };
 
 RGBLEDPlugin::RGBLEDPlugin():
@@ -54,13 +64,51 @@ RGBLEDPlugin::RGBLEDPlugin():
 
 void RGBLEDPlugin::initialize(UAS& uas_) {
     PluginBase::initialize(uas_);
+
+    led_control_raw_sub = plugin_nh.subscribe("led_control_raw", 10, &RGBLEDPlugin::led_control_raw_cb, this);
+    led_control_sub = plugin_nh.subscribe("led_control", 10, &RGBLEDPlugin::led_control_cb, this);
 }
 
 Subscriptions RGBLEDPlugin::get_subscriptions() {
     return {};
 }
 
-} // namespace std_plugins
+void RGBLEDPlugin::led_control_raw_cb(const mavros_rgbled::LedControlRawConstPtr& msg) {
+    mavros_rgbled::LedControlRaw::_custom_bytes_type::size_type custom_len = msg->custom_bytes.size();
+    if ((custom_len < 3) or (custom_len > 4)) {
+        ROS_ERROR("Wrong LED pattern size (%lu)", custom_len);
+        return;
+    }
+
+    mavlink::ardupilotmega::msg::LED_CONTROL lc_msg;
+    lc_msg.target_system = msg->target_system;
+    lc_msg.target_component = msg->target_component;
+    lc_msg.instance = msg->instance;
+    lc_msg.pattern = msg->pattern;
+    lc_msg.custom_len = msg->custom_bytes.size();
+    std::copy(
+        msg->custom_bytes.begin(),
+        msg->custom_bytes.end(),
+        lc_msg.custom_bytes.begin()
+    );
+    UAS_FCU(m_uas)->send_message_ignore_drop(lc_msg);
+}
+
+void RGBLEDPlugin::led_control_cb(const mavros_rgbled::LedControlConstPtr& msg) {
+    mavlink::ardupilotmega::msg::LED_CONTROL lc_msg;
+    lc_msg.target_system = m_uas->get_tgt_system();
+    lc_msg.target_component = m_uas->get_tgt_component();
+    lc_msg.instance = msg->instance;
+    lc_msg.pattern = utils::enum_value(mavlink::ardupilotmega::LED_CONTROL_PATTERN::CUSTOM);
+    lc_msg.custom_len = 4;
+    lc_msg.custom_bytes[0] = msg->red;
+    lc_msg.custom_bytes[1] = msg->green;
+    lc_msg.custom_bytes[2] = msg->blue;
+    lc_msg.custom_bytes[3] = msg->rate_hz;
+    UAS_FCU(m_uas)->send_message_ignore_drop(lc_msg);
+}
+
+} // namespace rgbled_plugin
 
 } // namespace mavros
 
