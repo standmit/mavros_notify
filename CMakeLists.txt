@@ -3,12 +3,25 @@ project(mavros_rgbled)
 
 find_package(catkin REQUIRED COMPONENTS
   mavros
+  message_generation
   pluginlib
 )
 
+add_message_files(
+  FILES
+    LedControl.msg
+    LedControlRaw.msg
+)
+
+generate_messages()
+
 catkin_package(
-  LIBRARIES rgb_led
-  CATKIN_DEPENDS mavros pluginlib
+  LIBRARIES
+    rgb_led
+  CATKIN_DEPENDS
+    mavros
+    message_runtime
+    pluginlib
 )
 
 include_directories(
@@ -16,6 +29,7 @@ include_directories(
 )
 
 add_library(rgb_led src/rgb_led.cpp)
+add_dependencies(rgb_led ${${PROJECT_NAME}_EXPORTED_TARGETS})
 target_link_libraries(rgb_led ${catkin_LIBRARIES})
 
 install(TARGETS rgb_led
