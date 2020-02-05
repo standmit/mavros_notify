@@ -21,8 +21,8 @@ catkin_package(
   INCLUDE_DIRS
     include
   LIBRARIES
-    rgb_led
-    utils
+    ${PROJECT_NAME}
+    ${PROJECT_NAME}_utils
   CATKIN_DEPENDS
     mavros
     message_runtime
@@ -34,15 +34,15 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_library(rgb_led src/rgb_led.cpp)
-add_dependencies(rgb_led ${${PROJECT_NAME}_EXPORTED_TARGETS})
-target_link_libraries(rgb_led ${catkin_LIBRARIES})
+add_library(${PROJECT_NAME} src/rgb_led.cpp)
+add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS})
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
 
-add_library(utils src/utils.cpp)
-add_dependencies(utils ${${PROJECT_NAME}_EXPORTED_TARGETS})
-target_link_libraries(utils ${catkin_LIBRARIES})
+add_library(${PROJECT_NAME}_utils src/utils.cpp)
+add_dependencies(${PROJECT_NAME}_utils ${${PROJECT_NAME}_EXPORTED_TARGETS})
+target_link_libraries(${PROJECT_NAME}_utils ${catkin_LIBRARIES})
 
-install(TARGETS rgb_led utils
+install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_utils
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

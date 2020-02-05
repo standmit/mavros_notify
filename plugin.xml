@@ -1,4 +1,4 @@
-<library path="lib/librgb_led">
+<library path="lib/libmavros_rgbled">
     <class name="rgb_led" type="mavros::rgbled_plugin::RGBLEDPlugin" base_class_type="mavros::plugin::PluginBase">
         <description>Control RGB LED</description>
     </class>
