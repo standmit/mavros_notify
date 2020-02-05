@@ -24,16 +24,16 @@
  */
 
 #include <mavros/mavros_plugin.h>
-#include <mavros_rgbled/LedControlRaw.h>
-#include <mavros_rgbled/LedControl.h>
-#include <mavros_rgbled/BlinkSequence.h>
+#include <mavros_notify/LedControlRaw.h>
+#include <mavros_notify/LedControl.h>
+#include <mavros_notify/BlinkSequence.h>
 #include <condition_variable>
 
 namespace mavros {
 
 using Subscriptions = plugin::PluginBase::Subscriptions;
 
-namespace rgbled_plugin {
+namespace notify_plugins {
 
 /**
  * \brief   RGB Led plugin
@@ -52,17 +52,17 @@ class RGBLEDPlugin : public plugin::PluginBase {
 
         ros::Subscriber led_control_raw_sub;
 
-        void led_control_raw_cb(const mavros_rgbled::LedControlRaw& msg);
+        void led_control_raw_cb(const mavros_notify::LedControlRaw& msg);
 
         ros::Subscriber led_control_sub;
 
-        void led_control_cb(const mavros_rgbled::LedControl& msg);
+        void led_control_cb(const mavros_notify::LedControl& msg);
 
         ros::Subscriber blink_sequence_sub;
 
-        void blink_sequence_cb(const mavros_rgbled::BlinkSequence& msg);
+        void blink_sequence_cb(const mavros_notify::BlinkSequence& msg);
 
-        void set_rgb(const mavros_rgbled::LedState& led_state);
+        void set_rgb(const mavros_notify::LedState& led_state);
 
         void handle_param_value(const mavlink::mavlink_message_t* const msg, mavlink::common::msg::PARAM_VALUE& pmsg);
         static const std::string led_override_param_id;
@@ -97,8 +97,8 @@ Subscriptions RGBLEDPlugin::get_subscriptions() {
     };
 }
 
-void RGBLEDPlugin::led_control_raw_cb(const mavros_rgbled::LedControlRaw& msg) {
-    mavros_rgbled::LedControlRaw::_custom_bytes_type::size_type custom_len = msg.custom_bytes.size();
+void RGBLEDPlugin::led_control_raw_cb(const mavros_notify::LedControlRaw& msg) {
+    mavros_notify::LedControlRaw::_custom_bytes_type::size_type custom_len = msg.custom_bytes.size();
     if ((custom_len < 3) or (custom_len > 4)) {
         ROS_ERROR("Wrong LED pattern size (%lu)", custom_len);
         return;
@@ -118,7 +118,7 @@ void RGBLEDPlugin::led_control_raw_cb(const mavros_rgbled::LedControlRaw& msg) {
     UAS_FCU(m_uas)->send_message_ignore_drop(lc_msg);
 }
 
-void RGBLEDPlugin::led_control_cb(const mavros_rgbled::LedControl& msg) {
+void RGBLEDPlugin::led_control_cb(const mavros_notify::LedControl& msg) {
     mavlink::ardupilotmega::msg::LED_CONTROL lc_msg;
     lc_msg.target_system = m_uas->get_tgt_system();
     lc_msg.target_component = m_uas->get_tgt_component();
@@ -132,7 +132,7 @@ void RGBLEDPlugin::led_control_cb(const mavros_rgbled::LedControl& msg) {
     UAS_FCU(m_uas)->send_message_ignore_drop(lc_msg);
 }
 
-void RGBLEDPlugin::set_rgb(const mavros_rgbled::LedState& led_state) {
+void RGBLEDPlugin::set_rgb(const mavros_notify::LedState& led_state) {
     mavlink::ardupilotmega::msg::LED_CONTROL lc_msg;
     lc_msg.target_system = m_uas->get_tgt_system();
     lc_msg.target_component = m_uas->get_tgt_component();
@@ -146,7 +146,7 @@ void RGBLEDPlugin::set_rgb(const mavros_rgbled::LedState& led_state) {
     led_state.duration.sleep();
 }
 
-void RGBLEDPlugin::blink_sequence_cb(const mavros_rgbled::BlinkSequence& msg) {
+void RGBLEDPlugin::blink_sequence_cb(const mavros_notify::BlinkSequence& msg) {
     bool success = get_led_override_param();
     if (not success) {
         ROS_ERROR("Can't blink sequence! Can't get previos value of %s parameter", led_override_param_id.c_str());
@@ -229,9 +229,9 @@ bool RGBLEDPlugin::get_led_override_param() {
     return (led_override_waiter.wait_for(lock, std::chrono::seconds(PARAM_TIMEOUT_S)) == std::cv_status::no_timeout);
 }
 
-} // namespace rgbled_plugin
+} // namespace notify_plugins
 
 } // namespace mavros
 
 #include <pluginlib/class_list_macros.h>
-PLUGINLIB_EXPORT_CLASS(mavros::rgbled_plugin::RGBLEDPlugin, mavros::plugin::PluginBase)
+PLUGINLIB_EXPORT_CLASS(mavros::notify_plugins::RGBLEDPlugin, mavros::plugin::PluginBase)

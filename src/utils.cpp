@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief   Utilites for MAVROS RGB LED plugin
+ * \brief   Utilites for MAVROS Notify plugins
  * \author  Andrey Stepanov
  * \version 0.1.0
  * \copyright
@@ -23,9 +23,9 @@
  * SOFTWARE.
  */
 
-#include <mavros_rgbled/utils.h>
+#include <mavros_notify/utils.h>
 
-namespace mavros_rgbled {
+namespace mavros_notify {
 
 namespace utils {
 

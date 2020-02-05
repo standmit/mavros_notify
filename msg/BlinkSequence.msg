@@ -1,1 +1,1 @@
-mavros_rgbled/LedState[] sequence
+mavros_notify/LedState[] sequence

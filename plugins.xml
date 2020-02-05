@@ -1,0 +1,5 @@
+<library path="lib/libmavros_notify">
+    <class name="rgb_led" type="mavros::notify_plugins::RGBLEDPlugin" base_class_type="mavros::plugin::PluginBase">
+        <description>Control RGB LED</description>
+    </class>
+</library>

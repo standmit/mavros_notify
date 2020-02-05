@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief   Utilites for MAVROS RGB LED plugin
+ * \brief   Utilites for MAVROS Notify plugins
  * \author  Andrey Stepanov
  * \version 0.1.0
  * \copyright
@@ -26,9 +26,9 @@
 #ifndef MAVROS_RGBLED_UTILS_H_
 #define MAVROS_RGBLED_UTILS_H_
 
-#include <mavros_rgbled/LedState.h>
+#include <mavros_notify/LedState.h>
 
-namespace mavros_rgbled {
+namespace mavros_notify {
 
 namespace utils {
 
