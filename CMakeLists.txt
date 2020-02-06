@@ -9,8 +9,10 @@ find_package(catkin REQUIRED COMPONENTS
 
 add_message_files(
   FILES
+    BlinkSequence.msg
     LedControl.msg
     LedControlRaw.msg
+    LedState.msg
 )
 
 generate_messages()
