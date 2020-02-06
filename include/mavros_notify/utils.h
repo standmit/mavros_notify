@@ -40,6 +40,15 @@ LedState make_led_state(
         const LedState::_instance_type instance = LedState::INSTANCE_ALL
 );
 
+LedState make_led_state(
+        const uint8_t red,
+        const uint8_t green,
+        const uint8_t blue,
+        const double duration,
+        double& accum_duration,
+        const LedState::_instance_type instance = LedState::INSTANCE_ALL
+);
+
 }
 
 }

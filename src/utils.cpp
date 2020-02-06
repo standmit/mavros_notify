@@ -45,6 +45,24 @@ LedState make_led_state(
     return led_state;
 }
 
+LedState make_led_state(
+        const uint8_t red,
+        const uint8_t green,
+        const uint8_t blue,
+        const double duration,
+        double& accum_duration,
+        const LedState::_instance_type instance
+) {
+    accum_duration += duration;
+    return make_led_state(
+        red,
+        green,
+        blue,
+        duration,
+        instance
+    );
+}
+
 }
 
 }
