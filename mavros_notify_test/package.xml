@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>mavros_notify_test</name>
+  <version>0.1.0</version>
+  <description>Test package for mavros_notify</description>
+
+  <maintainer email="standmit@zabstrannik.ru">Andrey Stepanov</maintainer>
+
+  <license>GPLv3</license>
+
+  <author email="standmit@zabstrannik.ru">Andrey Stepanov</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>mavros</exec_depend>
+  <depend>mavros_notify</depend>
+
+  <export>
+  </export>
+</package>

@@ -1,0 +1,31 @@
+<launch>
+    <env name="GAZEBO_MODEL_PATH" value="$(find mavros_notify_test)/models:$(optenv GAZEBO_MODEL_PATH)"/>
+
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(find mavros_notify_test)worlds/notify.world"/>
+        <arg name="gui" value="false" />
+    </include>
+
+    <node name="sitl" pkg="mavros_notify_test" type="start_sitl.bash" />
+
+    <arg name="mavros_name" value="mavros" />
+
+    <node name="$(arg mavros_name)" pkg="mavros" type="mavros_node">
+        <param name="fcu_url" value="udp://127.0.0.1:14560@" />
+        <param name="target_system_id" value="1" />
+        <param name="target_component_id" value="1" />
+        <rosparam>
+            plugin_blacklist: []
+            plugin_whitelist:
+                - command
+                - param
+                - rgb_led
+                - sys_status
+        </rosparam>
+        <rosparam command="load" file="$(find mavros_notify_test)/param/sys_status.yaml" />
+    </node>
+    
+    <node name="blinking" pkg="mavros_notify_test" type="blinking">
+        <remap from="~blink" to="$(arg mavros_name)/rgb_led/blink_sequence" />
+    </node>
+</launch>

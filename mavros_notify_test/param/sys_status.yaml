@@ -1,0 +1,5 @@
+conn:
+    heartbeat_rate: 1.0
+
+sys:
+    disable_diag: true

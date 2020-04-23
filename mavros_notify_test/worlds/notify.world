@@ -1,0 +1,95 @@
+<sdf version='1.6'>
+  <world name='default'>
+    <light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose frame=''>0 0 10 0 -0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <gravity>0 0 -9.8</gravity>
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type='adiabatic'/>
+    <physics name='default_physics' default='0' type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    <scene>
+      <ambient>0.8 0.8 0.8 1</ambient>
+      <background>0.8 0.8 1 1</background>
+      <shadows>1</shadows>
+    </scene>
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <world_frame_orientation>ENU</world_frame_orientation>
+      <latitude_deg>56.4765729993</latitude_deg>
+      <longitude_deg>85.0849835555</longitude_deg>
+      <elevation>148.679004394</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+
+
+   <model name='helipad'>
+        <static>1</static>
+        <pose>0 0 -0.1  0 -0 0</pose>
+        <link name='link'>
+            <collision name='collision'>
+                <geometry>
+                    <box>
+                        <size>2. 2. 0.2</size>
+                    </box>
+                </geometry>
+                <surface>
+                    <contact>
+                        <ode />
+                    </contact>
+                    <friction>
+                        <ode />
+                    </friction>
+                </surface>
+            </collision>
+
+         	<visual name='visual'>
+	         <cast_shadows>0</cast_shadows>
+	         <transparency>0</transparency>
+                <geometry>
+                    <box>
+                        <size>2. 2. 0.2</size>
+                    </box>
+                </geometry>
+                <material>
+            		<script>
+              			<uri>file://media/materials/scripts/gazebo.material</uri>
+              			<name>Gazebo/Grass</name>
+           			</script>
+				</material>
+	       </visual>
+
+        </link>
+    </model>
+
+    <model name="iris">
+      <pose>0 0 0  0 -0 -1.4</pose>
+      <include>
+        <uri>model://iris_with_standoffs_demo</uri>
+         <pose> 0 0 0 0 0 0 </pose>
+      </include>
+    </model>
+    
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose frame=''>-5 0 7 0 0.423645 0</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+  </world>
+</sdf>
