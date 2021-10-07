@@ -17,18 +17,10 @@ add_executable(blinking src/blinking.cpp)
 add_dependencies(blinking ${catkin_EXPORTED_TARGETS})
 target_link_libraries(blinking ${catkin_LIBRARIES})
 
-install(DIRECTORY models
+install(DIRECTORY models worlds param launch
     DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
-install(DIRECTORY worlds
-    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
-
-install(DIRECTORY param
-    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
-
-install(FILES start_sitl.bash
+install(PROGRAMS start_sitl.bash prerequests.bash
     DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
