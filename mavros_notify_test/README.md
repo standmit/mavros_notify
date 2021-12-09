@@ -1,9 +1,6 @@
 # MAVROS Notify test package
 This packagee consists hand-test with FCU SITL environment.
 
-### Prerequests
-You need Ardupilot source code and Ardupilot Gazebo plugin to run test. Choose directory you want download it to and run `prerequests.bash`.
-
 ### RGB blinking
 
 ##### Description
